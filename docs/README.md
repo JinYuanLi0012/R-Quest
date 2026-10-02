@@ -37,7 +37,7 @@ The website separates the five-round benchmark tables from the ten-round extende
 - Light/dark theme, saved locally.
 - Tabs for invalid questions and repeated tasks.
 - An approximate novelty pass-probability calculator using `(1-p)^K`, labeled as an approximation.
-- Backbone selection for benchmark results.
+- Backbone and domain selection with named, per-benchmark results across all twelve benchmarks.
 - Four analysis figure tabs.
 - Figure enlargement with a keyboard-accessible dialog.
 - Copyable BibTeX citation.

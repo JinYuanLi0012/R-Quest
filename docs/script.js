@@ -50,16 +50,25 @@ fraction.addEventListener('input', updateProbability);
 comparisons.addEventListener('change', updateProbability);
 updateProbability();
 
-const benchmarks = {
-  qwen: { name:'Qwen3-4B-Base', rows:[['Base model',46.17,58.79,28.79],['Base + validity init.',47.07,59.63,29.40],['R-Zero',49.10,59.27,31.21],['OCNR',49.57,60.28,31.56],['R-Diverse',49.82,60.50,31.76],['R-Quest',51.64,62.69,32.75]] },
-  octo: { name:'OctoThinker-3B', rows:[['Base model',24.90,13.67,8.30],['Base + validity init.',25.22,14.77,9.04],['R-Zero',28.25,14.14,14.10],['OCNR',28.12,15.60,13.83],['R-Diverse',28.61,14.98,14.50],['R-Quest',30.69,18.90,15.50]] }
-};
-document.querySelectorAll('[data-backbone]').forEach(button => button.addEventListener('click', () => {
-  const data = benchmarks[button.dataset.backbone];
-  document.querySelectorAll('[data-backbone]').forEach(b => { const active=b===button; b.classList.toggle('active',active); b.setAttribute('aria-pressed',String(active)); });
-  document.querySelector('#benchmark-table caption').textContent = `Domain-average benchmark scores for ${data.name}`;
-  document.querySelector('#benchmark-table tbody').innerHTML = data.rows.map(row => `<tr${row[0]==='R-Quest'?' class="ours"':''}><th scope="row">${row[0]}${row[0]==='R-Quest'?' <span>Ours</span>':''}</th>${row.slice(1).map(x=>`<td>${x.toFixed(2)}</td>`).join('')}</tr>`).join('');
-}));
+let benchmarkBackbone = 'qwen';
+let benchmarkDomain = 'math';
+const domainLabels = { math:'Mathematical reasoning', code:'Code generation', general:'General-domain reasoning' };
+function renderBenchmarks() {
+  const model = BENCHMARKS[benchmarkBackbone];
+  const data = model.domains[benchmarkDomain];
+  const table = document.getElementById('benchmark-table');
+  table.dataset.domain = benchmarkDomain;
+  table.querySelector('caption').textContent = domainLabels[benchmarkDomain] + ' benchmark scores for ' + model.name;
+  table.querySelector('thead').innerHTML = '<tr><th scope="col">Method</th>' + data.headers.map((name,index) => '<th scope="col"' + (index===0?' class="average-column"':'') + '>' + name + '</th>').join('') + '</tr>';
+  const best = data.headers.map((_,index) => Math.max(...data.rows.map(row => row[index+1])));
+  table.querySelector('tbody').innerHTML = data.rows.map(row => '<tr' + (row[0]==='R-Quest'?' class="ours"':'') + '><th scope="row">' + row[0] + (row[0]==='R-Quest'?' <span>Ours</span>':'') + '</th>' + row.slice(1).map((score,index) => '<td class="' + (index===0?'average-column ':'') + (score===best[index]?'best':'') + '">' + score.toFixed(2) + '</td>').join('') + '</tr>').join('');
+  document.querySelectorAll('[data-backbone]').forEach(button => { const active=button.dataset.backbone===benchmarkBackbone;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active)); });
+  document.querySelectorAll('[data-benchmark-domain]').forEach(button => { const active=button.dataset.benchmarkDomain===benchmarkDomain;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active)); });
+  document.getElementById('benchmark-metric').textContent = benchmarkDomain==='math' ? 'AMC and AIME: mean@32. Other math benchmarks: greedy-decoding accuracy.' : benchmarkDomain==='code' ? 'HumanEval+ and MBPP+: pass@1 on the full EvalPlus test suites.' : 'SuperGPQA, MMLU-Pro and BBEH: exact-match accuracy under greedy decoding.';
+}
+document.querySelectorAll('[data-backbone]').forEach(button => button.addEventListener('click', () => {benchmarkBackbone=button.dataset.backbone;renderBenchmarks();}));
+document.querySelectorAll('[data-benchmark-domain]').forEach(button => button.addEventListener('click', () => {benchmarkDomain=button.dataset.benchmarkDomain;renderBenchmarks();}));
+renderBenchmarks();
 
 const evidence = {
   ablation:{asset:'ablation',index:'01 / COMPONENT ABLATIONS',title:'Both signals matter.<br>Validity sustains the gains.',body:'Either validity or novelty feedback alone achieves a higher peak score than R-Zero. However, validity feedback is more critical for sustained gains: its removal leads to late-stage collapse, whereas the variant without novelty feedback shows a milder decline and remains above the base model.',caption:'Average performance on seven benchmarks over ten rounds on Qwen3-4B-Base.',alt:'Ablation comparison: removing validity feedback leads to late-stage collapse; without novelty the decline is milder.'},

@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="R-Quest supports sustained self-evolution in reasoning models through question validity and novelty feedback.">
+  <meta name="theme-color" content="#f8faff">
+  <title>R-Quest — Questioning the Questions</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="header">
+    <div class="nav-shell">
+      <a class="brand" href="#top" aria-label="R-Quest home"><span class="brand-icon">Q</span>R-Quest</a>
+      <nav aria-label="Main navigation">
+        <a href="#problem">The problem</a><a href="#method">Method</a><a href="#results">Results</a><a href="#cite">Cite</a>
+      </nav>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark theme"><span aria-hidden="true">◐</span><span id="theme-label">Dark</span></button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero section-shell" id="top">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="eyebrow-line"></span>VALIDITY + NOVELTY · SUSTAINED SELF-EVOLUTION</div>
+        <h1>Questioning<br>the Questions<span class="title-colon">:</span></h1>
+        <p class="paper-subtitle">Sustaining Self-Evolution<br class="desktop-break"> in Reasoning Models</p>
+        <div class="authors" aria-label="Authors in paper order">
+          <span>Jinyuan Li<sup>1</sup>,</span> <span>Chengsong Huang<sup>1</sup>,</span> <span>Langlin Huang<sup>1</sup>,</span> <span>Donghong Cai<sup>1</sup>,</span> <span>Shiping Gao<sup>2</sup>,</span> <span>Yuyi Yang<sup>1</sup>,</span> <span>Jiaxin Huang<sup>1,*</sup></span>
+        </div>
+        <div class="affiliations"><span><sup>1</sup> Washington University in St. Louis</span><span><sup>2</sup> University of Michigan, Ann Arbor</span><span class="corresponding"><sup>*</sup> Corresponding author</span></div>
+        <p class="hero-summary">Self-evolving reasoning models learn from their own generated questions, yet repeated self-training can lead to performance collapse. R-Quest uses question validity and novelty feedback to guide self-evolution.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="https://github.com/JinYuanLi0012/R-Quest" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.68-.22.68-.48v-1.86c-2.78.6-3.37-1.18-3.37-1.18-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.64.35-1.08.63-1.33-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.99 1.03-2.69-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.03a9.58 9.58 0 0 1 5 0c1.91-1.3 2.75-1.03 2.75-1.03.55 1.38.2 2.4.1 2.65.64.7 1.03 1.6 1.03 2.69 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 22 12c0-5.52-4.48-10-10-10Z"/></svg>Code</a>
+          <button class="button paper-pending" type="button" disabled title="The arXiv paper has not been published yet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6M9 16h6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>Paper <span>Coming soon</span></button>
+          <a class="text-link" href="#method">Explore the method</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="figure-label"><span>QWEN3-4B-BASE</span><span>10 ROUNDS</span></div>
+        <button class="figure-button hero-plot" type="button" data-zoom="assets/teaser.webp" data-caption="Average performance on seven math benchmarks. R-Quest peaks at round ten, leading R-Zero by 17.32 points at the same round." aria-label="Enlarge the ten-round performance figure"><img src="assets/teaser.webp" width="1600" height="1528" alt="R-Quest improves to 51.92% in round ten, while R-Zero declines to 34.60%." fetchpriority="high"></button>
+        <div class="hero-figure-note"><strong>Keep learning. Keep improving.</strong><span>R-Quest exceeds R-Zero’s peak in every round.</span></div>
+      </div>
+    </section>
+
+    <div class="section-shell metric-strip" aria-label="Paper highlights">
+      <div><strong>+17.32<span> pts</span></strong><p>vs. R-Zero at round ten</p></div>
+      <div><strong>10<span> rounds</span></strong><p>Sustained self-evolution</p></div>
+      <div><strong>12<span> benchmarks</span></strong><p>Math, general reasoning &amp; code</p></div>
+      <div><strong>2<span> model families</span></strong><p>Qwen and Llama</p></div>
+    </div>
+
+    <section class="section-shell content-section" id="problem">
+      <div class="section-heading"><p class="eyebrow">01 / THE PROBLEM</p><h2>When the questions stop<br>being useful.</h2><p>Our analysis identifies two recurring quality problems in self-generated questions: invalid questions and repeated variants of the same mathematical questions.</p></div>
+      <div class="tabs problem-tabs" role="tablist" aria-label="Question quality problems">
+        <button type="button" id="invalid-tab" class="tab active" role="tab" aria-selected="true" aria-controls="invalid-panel" data-tab-group="problem"><span class="tab-number">01</span>Invalid questions</button>
+        <button type="button" id="repeated-tab" class="tab" role="tab" aria-selected="false" aria-controls="repeated-panel" tabindex="-1" data-tab-group="problem"><span class="tab-number">02</span>Repeated tasks</button>
+      </div>
+      <div class="problem-panel" id="invalid-panel" role="tabpanel" aria-labelledby="invalid-tab">
+        <div class="problem-copy">
+          <h3>Answer disagreement can hide an invalid question.</h3>
+          <p>Self-generated questions are not always well posed. Invalid questions become more prevalent across rounds, and answer-consistency filtering further increases their proportion in training data.</p>
+          <div class="question-example"><div class="example-label">EXAMPLE FROM THE PAPER</div><p>Let <i>x, y</i> ∈ ℝ,<br><i>x + y</i> = 3, <i>xy</i> = 3.<br>Find <i>x</i><sup>2</sup> + <i>y</i><sup>2</sup>.</p><div class="example-verdict"><span>INVALID</span>No real solution</div></div>
+          <p class="small-note">R-Quest trains the solver to recognize and reject invalid questions before self-evolution.</p>
+        </div>
+        <figure class="paper-figure"><button class="figure-button" type="button" data-zoom="assets/validity-filter.webp" data-caption="Valid-question rates before and after R-Zero’s answer-consistency filter over five rounds." aria-label="Enlarge the question validity figure"><img src="assets/validity-filter.webp" width="1600" height="887" alt="R-Zero valid-question rates decline over five rounds; filtering further lowers validity." loading="lazy"></button><figcaption>Valid-question rates before and after R-Zero’s answer-consistency filter. In round five, only 27.64% of the retained questions are valid.</figcaption></figure>
+      </div>
+      <div class="problem-panel" id="repeated-panel" role="tabpanel" aria-labelledby="repeated-tab" hidden>
+        <div class="problem-copy">
+          <h3>Different wording.<br>The same mathematical task.</h3>
+          <p>Generated questions can repeat the same mathematical task structure despite differences in wording, notation, or numerical parameters. Lexical similarity may not capture repetition at the level of question types.</p>
+          <div class="problem-stat"><strong>59.5%</strong><span>of sampled round-five questions belong to the three largest question types.</span></div>
+          <p>The largest question type is split into <strong>22 BLEU clusters</strong>. Such fragmentation can weaken the repetition penalty on a frequently repeated type.</p>
+        </div>
+        <figure class="paper-figure"><button class="figure-button" type="button" data-zoom="assets/repetition.webp" data-caption="Repeated question distribution and BLEU fragmentation in the fifth round of R-Zero. The two examples are equivalent mathematical tasks." aria-label="Enlarge the repeated question examples"><img src="assets/repetition.webp" width="1600" height="1139" alt="Two mathematically equivalent sequence problems appear in separate BLEU clusters." loading="lazy"></button><figcaption>Question A and B share the same sequence construction and requested computation, despite differences in wording and indexing.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="method-band" id="method">
+      <div class="section-shell content-section">
+        <div class="section-heading"><p class="eyebrow">02 / THE METHOD</p><h2>Better questions.<br>Sustained self-evolution.</h2><p>R-Quest introduces two forms of feedback: validity feedback from a solver initialized to recognize and reject invalid questions, and novelty feedback from the frozen base model.</p></div>
+        <figure class="overview-figure"><button class="figure-button" type="button" data-zoom="assets/overview.webp" data-caption="Two question-quality problems in self-evolution and how R-Quest addresses them: rejecting invalid questions and recognizing repeated mathematical tasks." aria-label="Enlarge the full R-Quest overview"><img src="assets/overview.webp" width="2800" height="989" alt="The paper’s illustrated overview compares R-Zero and R-Quest: R-Quest rejects invalid questions and recognizes repeated tasks." loading="lazy"></button><figcaption>Two question-quality problems in self-evolution and how R-Quest addresses them. Click the figure to enlarge.</figcaption></figure>
+        <div class="method-steps">
+          <article><span class="step-index blue">01</span><h3>Initialize for validity</h3><p>Train the base model with GRPO to return a mathematical answer for a valid question or <code>INVALID</code> for an invalid one.</p></article>
+          <article><span class="step-index violet">02</span><h3>Assess task novelty</h3><p>Use a frozen base model to compare sampled question pairs. A single same-type match is sufficient for rejection.</p></article>
+          <article><span class="step-index ink">03</span><h3>Co-evolve with feedback</h3><p>These signals guide questioner rewards during alternating questioner–solver updates. The solver trains on the filtered questions.</p></article>
+        </div>
+        <div class="reward-strip" aria-label="Questioner rewards"><span class="reward invalid"><b>Invalid</b><span>Negative reward</span></span><span class="reward repeated"><b>Valid, repeated</b><span>Zero reward</span></span><span class="reward novel"><b>Valid, novel</b><span>Uncertainty reward</span></span></div>
+        <div class="novelty-lab">
+          <div class="lab-copy"><p class="eyebrow">SAMPLED PAIRWISE JUDGMENTS</p><h3>Frequent task types<br>are less likely to pass.</h3><p>We uniformly sample <i>K</i> other questions per candidate and reject the candidate if any reference is judged to be of the same type. This reduces the comparison cost from O(<i>B</i><sup>2</sup>) to O(<i>BK</i>).</p><div class="formula">Pr(pass | <i>p</i>) ≈ (1 − <i>p</i>)<sup>K</sup></div><p class="small-note">Approximation when K is small relative to the batch size B.</p></div>
+          <div class="lab-controls">
+            <div class="control-heading"><label for="type-fraction">Same-type fraction <i>p</i></label><output id="fraction-value" for="type-fraction">20%</output></div>
+            <input type="range" id="type-fraction" min="0" max="100" step="1" value="20" aria-describedby="fraction-description">
+            <p id="fraction-description" class="small-note">Fraction of the remaining questions that share the same task type.</p>
+            <div class="control-heading"><label for="comparisons">Comparisons per question <i>K</i></label><select id="comparisons"><option value="2">2</option><option value="4">4</option><option value="8" selected>8 · paper default</option><option value="16">16</option></select></div>
+            <div class="pass-result"><span>Approximate pass probability</span><output id="pass-value" for="type-fraction comparisons" aria-live="polite">16.8%</output></div>
+            <div class="probability-track" aria-hidden="true"><span id="pass-bar" style="width:16.8%"></span></div>
+            <p class="lab-result-note" id="pass-description">At a 20% same-type fraction, about 17 in 100 candidates pass with K = 8.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-shell content-section" id="results">
+      <div class="section-heading"><p class="eyebrow">03 / THE RESULTS</p><h2>Improvement that lasts.</h2><p>R-Quest sustains its gains over ten rounds of self-evolution, reaching its best mathematical performance in the final round on Qwen3-4B-Base.</p></div>
+      <div class="result-feature">
+        <div class="result-story"><div class="result-big-number">51.92<span>%</span></div><h3>Best performance.<br>Final round.</h3><p>R-Zero peaks at 49.10 in round three, then declines to 34.60 by round ten. R-Quest retains its gains despite minor fluctuations between rounds.</p><div class="result-divider"></div><p><strong>+5.75 points</strong> above the base model after ten rounds, compared with R-Zero’s decline of 11.57 points.</p></div>
+        <figure class="paper-figure evolution-figure"><button class="figure-button" type="button" data-zoom="assets/evolution.webp" data-caption="Average performance on seven math benchmarks over ten rounds of self-evolution on Qwen3-4B-Base." aria-label="Enlarge the sustained self-evolution chart"><img src="assets/evolution.webp" width="1600" height="1103" alt="R-Quest achieves its best mathematical average of 51.92% at round ten, 17.32 points above R-Zero." loading="lazy"></button><figcaption>Average performance on seven math benchmarks over ten rounds.</figcaption></figure>
+      </div>
+
+      <div class="benchmark-block">
+        <div class="subsection-heading"><div><h3>Across domains and model families.</h3><p>Domain-average results from the paper’s benchmark tables.</p></div><div class="segmented" role="group" aria-label="Benchmark backbone"><button class="active" type="button" data-backbone="qwen" aria-pressed="true">Qwen3-4B</button><button type="button" data-backbone="octo" aria-pressed="false">OctoThinker-3B</button></div></div>
+        <div class="table-wrap"><table id="benchmark-table"><caption class="visually-hidden">Domain-average benchmark scores for Qwen3-4B-Base</caption><thead><tr><th scope="col">Method</th><th scope="col">Math <span>7 benchmarks</span></th><th scope="col">Code <span>2 benchmarks</span></th><th scope="col">General <span>3 benchmarks</span></th></tr></thead><tbody><tr><th scope="row">Base model</th><td>46.17</td><td>58.79</td><td>28.79</td></tr><tr><th scope="row">Base + validity init.</th><td>47.07</td><td>59.63</td><td>29.40</td></tr><tr><th scope="row">R-Zero</th><td>49.10</td><td>59.27</td><td>31.21</td></tr><tr><th scope="row">OCNR</th><td>49.57</td><td>60.28</td><td>31.56</td></tr><tr><th scope="row">R-Diverse</th><td>49.82</td><td>60.50</td><td>31.76</td></tr><tr class="ours"><th scope="row">R-Quest <span>Ours</span></th><td>51.64</td><td>62.69</td><td>32.75</td></tr></tbody></table></div>
+        <p class="small-note benchmark-note">Scores in %. Mathematical results compare five rounds of self-evolution; each domain reports the checkpoint with the highest domain-average score. The ten-round result above is a separate extended-run analysis.</p>
+      </div>
+
+      <div class="evidence-block">
+        <div class="subsection-heading"><div><h3>What keeps self-evolution on track?</h3><p>Explore the paper’s analysis figures.</p></div></div>
+        <div class="tabs evidence-tabs" role="tablist" aria-label="Analysis figures"><button type="button" class="tab active" role="tab" aria-selected="true" data-evidence="ablation" id="evidence-ablation" aria-controls="evidence-panel">Component ablations</button><button type="button" class="tab" role="tab" aria-selected="false" tabindex="-1" data-evidence="validity" id="evidence-validity" aria-controls="evidence-panel">Question validity</button><button type="button" class="tab" role="tab" aria-selected="false" tabindex="-1" data-evidence="answers" id="evidence-answers" aria-controls="evidence-panel">Answer quality</button><button type="button" class="tab" role="tab" aria-selected="false" tabindex="-1" data-evidence="diversity" id="evidence-diversity" aria-controls="evidence-panel">Task diversity</button></div>
+        <div class="evidence-panel" id="evidence-panel" role="tabpanel" aria-labelledby="evidence-ablation"><figure class="paper-figure"><button class="figure-button" id="evidence-zoom" type="button" data-zoom="assets/ablation.webp" data-caption="Component ablations over ten rounds on Qwen3-4B-Base." aria-label="Enlarge the selected analysis figure"><img id="evidence-image" src="assets/ablation.webp" width="1600" height="1103" alt="Ablation comparison: removing validity feedback leads to late-stage collapse; without novelty the decline is milder." loading="lazy"></button><figcaption id="evidence-caption">Average performance on seven benchmarks over ten rounds on Qwen3-4B-Base.</figcaption></figure><div class="evidence-copy"><span class="figure-index" id="evidence-index">01 / COMPONENT ABLATIONS</span><h3 id="evidence-title">Both signals matter.<br>Validity sustains the gains.</h3><p id="evidence-body">Either validity or novelty feedback alone achieves a higher peak score than R-Zero. However, validity feedback is more critical for sustained gains: its removal leads to late-stage collapse, whereas the variant without novelty feedback shows a milder decline and remains above the base model.</p><a class="text-link" id="evidence-pdf" href="assets/ablation.pdf" target="_blank" rel="noopener noreferrer">View original figure PDF</a></div></div>
+      </div>
+    </section>
+
+    <section class="cite-band" id="cite"><div class="section-shell content-section cite-layout"><div><p class="eyebrow">04 / CITE THIS WORK</p><h2>R-Quest</h2><p>Questioning the Questions: Sustaining Self-Evolution in Reasoning Models</p><p class="small-note">Preprint · 2026<br>arXiv link coming soon.</p><a class="button primary" href="https://github.com/JinYuanLi0012/R-Quest" target="_blank" rel="noopener noreferrer">View code on GitHub</a></div><div class="citation-box"><div class="citation-heading"><span>BibTeX</span><button type="button" id="copy-citation">Copy citation</button></div><pre id="bibtex">@misc{li2026rquest,
+  title={Questioning the Questions: Sustaining
+         Self-Evolution in Reasoning Models},
+  author={Jinyuan Li and Chengsong Huang and
+          Langlin Huang and Donghong Cai and
+          Shiping Gao and Yuyi Yang and
+          Jiaxin Huang},
+  year={2026},
+  url={https://github.com/JinYuanLi0012/R-Quest}
+}</pre><p class="copy-status" id="copy-status" role="status" aria-live="polite"></p></div></div></section>
+  </main>
+  <footer class="footer section-shell"><a class="brand" href="#top"><span class="brand-icon">Q</span>R-Quest</a><p>Question validity. Task novelty. Sustained self-evolution.</p><span>© 2026 R-Quest authors</span></footer>
+  <dialog id="figure-dialog" class="figure-dialog" aria-label="Enlarged paper figure"><button type="button" class="dialog-close" id="close-figure" aria-label="Close enlarged figure">×</button><img id="dialog-image" alt=""><p id="dialog-caption"></p></dialog>
+</body>
+</html>

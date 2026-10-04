@@ -15,15 +15,18 @@
   // Round scores come from the original PDF paths, not pixel estimates.
   const chart = document.getElementById('trajectory-chart');
   const tx = round => 64 + round * 43.2;
-  const ty = score => 354 - (score - 32) / 23 * 302;
-  [35, 40, 45, 50, 55].forEach(score => {
+  let plotTop = 32, plotBottom = 372;
+  const ty = score => plotBottom - (score - 32) / 23 * (plotBottom - plotTop);
+  const scoreTicks = [35, 40, 45, 50, 55].map(score => {
     const y = ty(score);
-    make('line', { x1: 64, x2: 496, y1: y, y2: y, class: 'chart-grid' }, chart);
-    make('text', { x: 52, y: y + 6, 'text-anchor': 'end', class: 'chart-tick' }, chart, score);
+    return {score,
+      line: make('line', { x1: 64, x2: 496, y1: y, y2: y, class: 'chart-grid' }, chart),
+      label: make('text', { x: 52, y: y + 6, 'text-anchor': 'end', class: 'chart-tick' }, chart, score)
+    };
   });
-  [0, 2, 4, 6, 8, 10].forEach(round => make('text', { x: tx(round), y: 382, 'text-anchor': 'middle', class: 'chart-tick' }, chart, round));
-  make('text', { x: 280, y: 416, 'text-anchor': 'middle', class: 'chart-axis-title' }, chart, 'Self-evolution round');
-  make('text', { transform: 'translate(20 205) rotate(-90)', 'text-anchor': 'middle', class: 'chart-axis-title' }, chart, 'Math average (%)');
+  const roundTicks = [0, 2, 4, 6, 8, 10].map(round => make('text', { x: tx(round), y: 400, 'text-anchor': 'middle', class: 'chart-tick' }, chart, round));
+  const roundAxis = make('text', { x: 280, y: 434, 'text-anchor': 'middle', class: 'chart-axis-title' }, chart, 'Self-evolution round');
+  const scoreAxis = make('text', { transform: 'translate(20 202) rotate(-90)', 'text-anchor': 'middle', class: 'chart-axis-title' }, chart, 'Math average (%)');
   const band = make('path', { class: 'trajectory-band' }, chart);
   const zeroPath = make('path', { class: 'trajectory-line zero-line' }, chart);
   const questPath = make('path', { class: 'trajectory-line quest-line' }, chart);
@@ -92,6 +95,37 @@
     }
     animationFrame = requestAnimationFrame(frame);
   }
+  // Fit the drawing to the card's available height, extending the plot rather
+  // than stretching text, circles, robots, or leaving letterboxed whitespace.
+  const trajectoryResize = new ResizeObserver(entries => {
+    const {width, height} = entries[0].contentRect;
+    if (!width || !height) return;
+    const viewHeight = height / width * 600;
+    plotBottom = viewHeight - 78;
+    chart.setAttribute('viewBox', `0 0 600 ${viewHeight}`);
+    scoreTicks.forEach(tick => {
+      tick.line.setAttribute('y1', ty(tick.score));
+      tick.line.setAttribute('y2', ty(tick.score));
+      tick.label.setAttribute('y', ty(tick.score) + 6);
+    });
+    roundTicks.forEach(tick => tick.setAttribute('y', viewHeight - 50));
+    roundAxis.setAttribute('y', viewHeight - 16);
+    scoreAxis.setAttribute('transform', `translate(20 ${(plotTop + plotBottom) / 2}) rotate(-90)`);
+    guide.setAttribute('y1', plotTop);
+    guide.setAttribute('y2', plotBottom);
+    roundDots.forEach((dot, i) => {
+      dot.q.setAttribute('cy', ty(TRAJECTORY_DATA[i].rquest));
+      dot.z.setAttribute('cy', ty(TRAJECTORY_DATA[i].rzero));
+    });
+    qEnd.setAttribute('y', ty(51.92) + 5);
+    zEnd.setAttribute('y', ty(34.60) + 5);
+    robotQ.setAttribute('y', ty(51.92) - 54);
+    robotZ.setAttribute('y', ty(34.60) - 13);
+    const inspectedRound = selectedRound;
+    drawTrajectory(revealed);
+    selectRound(inspectedRound);
+  });
+  trajectoryResize.observe(chart.parentElement);
   // Start without a click. Like the reference homepage, re-entering the chart
   // restarts the reveal instead of retaining a completed one-shot animation.
   playTrajectory();

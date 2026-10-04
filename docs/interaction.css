@@ -49,14 +49,14 @@
 @media(max-width:760px){.rejection-only{padding:18px}.rejection-heading{font-size:20px}.result-story p,.evidence-copy p{font-size:18px}.subsection-heading h3{font-size:26px}.subsection-heading p{font-size:18px}.benchmark-block .segmented button,.evidence-tabs .tab{font-size:16px;padding:10px 13px}#benchmark-table{font-size:17px}#benchmark-table thead th{font-size:15px}.evidence-panel .paper-figure figcaption{font-size:15px}}
 @media(max-width:380px){.rejection-only{padding:14px}.rejection-only .curve-legend{font-size:14px;gap:10px}.rejection-readout output{font-size:21px}.rejection-readout span{font-size:12px}.rejection-readout-label{font-size:14px}}
 /* Keep the curve directly under its heading, where its reveal is visible. */
-.trajectory-card .live-trajectory{flex:1;display:flex;align-items:center;margin:0 0 18px}
+.trajectory-card .live-trajectory{position:relative;flex:1 0 auto;min-height:0;aspect-ratio:4/3;margin:0 0 8px}
 .trajectory-card{align-self:stretch}
-.trajectory-card .live-trajectory svg{flex:0 0 100%;height:auto}
+.trajectory-card .live-trajectory svg{position:absolute;inset:0;width:100%;height:100%}
 .hero-charts>.hero-chart-card>figcaption{border-top:1px solid var(--line);padding-top:20px;margin-top:24px}
 .trajectory-card figcaption{text-align:center;line-height:1.3}
-.trajectory-card figcaption strong{display:block;font-size:clamp(19.8px,1.62vw,23.4px);font-weight:650;letter-spacing:-.4px;text-wrap:balance}
-.trajectory-card .trajectory-context{display:block;margin:9px auto 0;font-size:16.2px;line-height:1.55;color:var(--muted);text-wrap:balance}
+.trajectory-card figcaption strong{display:block;font-size:clamp(17.82px,1.458vw,21.06px);font-weight:650;letter-spacing:-.4px;text-wrap:balance}
+.trajectory-card .trajectory-context{display:block;margin:9px auto 0;font-size:14.58px;line-height:1.55;color:var(--muted);text-wrap:balance}
 .trajectory-card .trajectory-readout{text-align:center;grid-template-columns:repeat(3,minmax(0,1fr));padding-block:16px 4px}
 .trajectory-card .trajectory-readout output{font-size:22px}
-@media(max-width:1050px){.trajectory-card .trajectory-context{font-size:14.4px}.trajectory-card .trajectory-readout output{font-size:19px}}
-@media(max-width:380px){.trajectory-card figcaption strong{font-size:20.7px}.trajectory-card .trajectory-readout output{font-size:16px}}
+@media(max-width:1050px){.trajectory-card .trajectory-context{font-size:12.96px}.trajectory-card .trajectory-readout output{font-size:19px}}
+@media(max-width:380px){.trajectory-card figcaption strong{font-size:18.63px}.trajectory-card .trajectory-readout output{font-size:16px}}

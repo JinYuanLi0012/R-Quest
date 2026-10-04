@@ -41,7 +41,7 @@
   const robotZ = make('image', { href: 'assets/trajectory-zero.png', x: 427, y: ty(34.60) - 13, width: 49, height: 49, class: 'trajectory-robot' }, chart);
   const roundInput = document.getElementById('trajectory-round');
   const roundOutput = document.getElementById('trajectory-round-value');
-  let revealed = 10, selectedRound = 10, animationFrame = 0, firstViewPlayed = false;
+  let revealed = 10, selectedRound = 10, animationFrame = 0, chartInView = false;
 
   function selectRound(round) {
     selectedRound = Math.min(Math.floor(revealed), Math.max(0, Math.round(round)));
@@ -77,25 +77,42 @@
     cancelAnimationFrame(animationFrame);
     if (motion.matches) { drawTrajectory(10); return; }
     drawTrajectory(0);
-    const start = performance.now();
+    // Measure frames actually rendered, not time spent loading or in a
+    // background tab. A delayed first frame must still begin at round zero.
+    let elapsed = 0, previousFrame = null;
     function frame(now) {
-      const progress = Math.min(10, (now - start) / 600);
+      if (document.hidden) { animationFrame = 0; return; }
+      if (previousFrame !== null) elapsed += Math.min(80, now - previousFrame);
+      previousFrame = now;
+      const progress = Math.min(10, elapsed / 600);
       drawTrajectory(progress);
       if (progress < 10) animationFrame = requestAnimationFrame(frame);
     }
     animationFrame = requestAnimationFrame(frame);
   }
-  // Start on page load; also replay automatically when an initially off-screen
-  // chart first comes into view, so readers never need to press a control.
+  // Start without a click. Like the reference homepage, re-entering the chart
+  // restarts the reveal instead of retaining a completed one-shot animation.
   playTrajectory();
   const trajectoryObserver = new IntersectionObserver(entries => {
-    if (!firstViewPlayed && entries.some(entry => entry.isIntersecting)) {
-      firstViewPlayed = true; playTrajectory();
-    }
-  }, { threshold: 0.1 });
+    entries.forEach(entry => {
+      if (entry.intersectionRatio >= 0.2 && !chartInView) {
+        chartInView = true; playTrajectory();
+      } else if (entry.intersectionRatio === 0) {
+        chartInView = false;
+        cancelAnimationFrame(animationFrame);
+        drawTrajectory(motion.matches ? 10 : 0);
+      }
+    });
+  }, { threshold: [0, 0.2] });
   trajectoryObserver.observe(chart);
-  document.getElementById('replay-trajectory').addEventListener('click', () => { firstViewPlayed = true; playTrajectory(); });
-  function inspectRound(round) { firstViewPlayed = true; cancelAnimationFrame(animationFrame); drawTrajectory(10); selectRound(round); }
+  document.getElementById('replay-trajectory').addEventListener('click', playTrajectory);
+  function inspectRound(round) { cancelAnimationFrame(animationFrame); drawTrajectory(10); selectRound(round); }
+  document.addEventListener('visibilitychange', () => {
+    cancelAnimationFrame(animationFrame);
+    if (!document.hidden) playTrajectory();
+  });
+  window.addEventListener('pageshow', event => { if (event.persisted) playTrajectory(); });
+  window.addEventListener('hashchange', () => { if (!location.hash || location.hash === '#top') playTrajectory(); });
   roundInput.addEventListener('input', () => inspectRound(Number(roundInput.value)));
   chart.addEventListener('pointermove', event => {
     const box = chart.getBoundingClientRect();

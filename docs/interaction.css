@@ -48,3 +48,6 @@
 @media(max-width:1050px){.novelty-lab{grid-template-columns:1fr;gap:25px}.rejection-only{max-width:650px;width:100%;margin-inline:auto}.evidence-copy h3{font-size:30px}}
 @media(max-width:760px){.rejection-only{padding:18px}.rejection-heading{font-size:20px}.result-story p,.evidence-copy p{font-size:18px}.subsection-heading h3{font-size:26px}.subsection-heading p{font-size:18px}.benchmark-block .segmented button,.evidence-tabs .tab{font-size:16px;padding:10px 13px}#benchmark-table{font-size:17px}#benchmark-table thead th{font-size:15px}.evidence-panel .paper-figure figcaption{font-size:15px}}
 @media(max-width:380px){.rejection-only{padding:14px}.rejection-only .curve-legend{font-size:14px;gap:10px}.rejection-readout output{font-size:21px}.rejection-readout span{font-size:12px}.rejection-readout-label{font-size:14px}}
+/* Keep the curve directly under its heading, where its reveal is visible. */
+.trajectory-card .live-trajectory{margin:0 0 16px}
+.trajectory-card figcaption{margin-top:auto;padding-top:20px}

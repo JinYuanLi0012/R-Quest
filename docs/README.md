@@ -35,7 +35,9 @@ The website separates the five-round benchmark tables from the ten-round extende
 ## Interactions
 
 - Light/dark theme, saved locally.
-- Tabs for invalid questions and repeated tasks.
+- A centered title and linked authors, followed by six animated domain-average bar groups and the paper's ten-round trajectory.
+- Bar growth on entry and a Replay button; reduced-motion preferences show the completed chart immediately.
+- Invalid-question trend and controlled-repair figures (Fig. 3a and the full Fig. 3b), followed by the task-repetition analysis.
 - An approximate novelty pass-probability calculator using `(1-p)^K`, labeled as an approximation.
 - Backbone and domain selection with named, per-benchmark results across all twelve benchmarks.
 - Four analysis figure tabs.
@@ -43,3 +45,5 @@ The website separates the five-round benchmark tables from the ten-round extende
 - Copyable BibTeX citation.
 
 The site uses no analytics, accounts, model APIs or external JavaScript dependencies.
+
+Hero bars show Base, R-Zero and R-Quest in that order. Gain labels compare R-Quest with R-Zero in percentage points. Qwen's row uses a 0–70 scale and OctoThinker's row uses a 0–35 scale; domains within each row share that scale. Values match the Average columns in `benchmark-data.js`.

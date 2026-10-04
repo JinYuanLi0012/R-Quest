@@ -12,17 +12,6 @@ function setTheme(theme) {
 try { setTheme(localStorage.getItem('rquest-theme') || 'light'); } catch (_) { setTheme('light'); }
 themeButton.addEventListener('click', () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
 
-const problemTabs = [...document.querySelectorAll('[data-tab-group="problem"]')];
-function chooseProblem(tab) {
-  problemTabs.forEach(button => {
-    const active = button === tab;
-    button.classList.toggle('active', active);
-    button.setAttribute('aria-selected', String(active));
-    button.tabIndex = active ? 0 : -1;
-    document.getElementById(button.getAttribute('aria-controls')).hidden = !active;
-  });
-}
-problemTabs.forEach(tab => tab.addEventListener('click', () => chooseProblem(tab)));
 function keyboardTabs(buttons, select) {
   buttons.forEach((button, index) => button.addEventListener('keydown', event => {
     let next;
@@ -34,7 +23,6 @@ function keyboardTabs(buttons, select) {
     event.preventDefault(); select(buttons[next]); buttons[next].focus();
   }));
 }
-keyboardTabs(problemTabs, chooseProblem);
 
 const fraction = document.getElementById('type-fraction');
 const comparisons = document.getElementById('comparisons');

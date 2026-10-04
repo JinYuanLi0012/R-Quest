@@ -41,7 +41,7 @@
   const robotZ = make('image', { href: 'assets/trajectory-zero.png', x: 427, y: ty(34.60) - 13, width: 49, height: 49, class: 'trajectory-robot' }, chart);
   const roundInput = document.getElementById('trajectory-round');
   const roundOutput = document.getElementById('trajectory-round-value');
-  let revealed = 10, selectedRound = 10, animationFrame = 0, chartInView = false;
+  let revealed = 10, selectedRound = 10, animationFrame = 0, repeatTimer = 0, chartInView = false;
 
   function selectRound(round) {
     selectedRound = Math.min(Math.floor(revealed), Math.max(0, Math.round(round)));
@@ -75,6 +75,7 @@
   }
   function playTrajectory() {
     cancelAnimationFrame(animationFrame);
+    clearTimeout(repeatTimer);
     if (motion.matches) { drawTrajectory(10); return; }
     drawTrajectory(0);
     // Measure frames actually rendered, not time spent loading or in a
@@ -87,6 +88,7 @@
       const progress = Math.min(10, elapsed / 600);
       drawTrajectory(progress);
       if (progress < 10) animationFrame = requestAnimationFrame(frame);
+      else if (chartInView && !document.hidden) repeatTimer = setTimeout(playTrajectory, 2500);
     }
     animationFrame = requestAnimationFrame(frame);
   }
@@ -100,15 +102,17 @@
       } else if (entry.intersectionRatio === 0) {
         chartInView = false;
         cancelAnimationFrame(animationFrame);
+        clearTimeout(repeatTimer);
         drawTrajectory(motion.matches ? 10 : 0);
       }
     });
   }, { threshold: [0, 0.2] });
   trajectoryObserver.observe(chart);
   document.getElementById('replay-trajectory').addEventListener('click', playTrajectory);
-  function inspectRound(round) { cancelAnimationFrame(animationFrame); drawTrajectory(10); selectRound(round); }
+  function inspectRound(round) { cancelAnimationFrame(animationFrame); clearTimeout(repeatTimer); drawTrajectory(10); selectRound(round); }
   document.addEventListener('visibilitychange', () => {
     cancelAnimationFrame(animationFrame);
+    clearTimeout(repeatTimer);
     if (!document.hidden) playTrajectory();
   });
   window.addEventListener('pageshow', event => { if (event.persisted) playTrajectory(); });
@@ -188,7 +192,7 @@
     else return;
     event.preventDefault(); selectShare(p);
   });
-  motion.addEventListener('change', () => { if (motion.matches) { cancelAnimationFrame(animationFrame); drawTrajectory(10); } });
+  motion.addEventListener('change', () => { if (motion.matches) { cancelAnimationFrame(animationFrame); clearTimeout(repeatTimer); drawTrajectory(10); } else if (chartInView) playTrajectory(); });
   selectShare(20);
 
 })();

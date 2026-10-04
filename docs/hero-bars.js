@@ -1,7 +1,7 @@
 'use strict';
 
 // Bar heights and labels share the domain-average values in benchmark-data.js.
-// Each model row has one scale, so domains within that row remain comparable.
+// Each domain group has a labeled, non-zero axis to magnify score differences.
 const barPanel = document.getElementById('hero-average-card');
 const barColumns = [...barPanel.querySelectorAll('.bar-column')];
 const reducedBarMotion = window.matchMedia('(prefers-reduced-motion: reduce)');

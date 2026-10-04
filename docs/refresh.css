@@ -1,4 +1,7 @@
 /* Larger type, a full-width paper header, and the preliminary-study narrative. */
+/* The six domain groups explicitly disclose their non-zero score axes. */
+.mini-scale{font-size:12px;line-height:1.4;text-align:center;color:var(--muted);margin:3px 0 0}
+.bar-fill::before{content:'';position:absolute;left:0;right:0;bottom:5px;height:7px;background:linear-gradient(165deg,transparent 0 36%,var(--paper) 38% 51%,transparent 53% 62%,var(--paper) 64% 76%,transparent 78%);z-index:1}
 body{font-size:19px;line-height:1.7}
 .section-shell{max-width:1360px}
 .nav-shell{max-width:1424px}.header nav{font-size:16px}.theme-toggle{font-size:15px}

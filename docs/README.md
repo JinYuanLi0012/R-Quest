@@ -46,4 +46,4 @@ The website separates the five-round benchmark tables from the ten-round extende
 
 The site uses no analytics, accounts, model APIs or external JavaScript dependencies.
 
-Hero bars show Base, R-Zero and R-Quest in that order. Gain labels compare R-Quest with R-Zero in percentage points. Qwen's row uses a 0–70 scale and OctoThinker's row uses a 0–35 scale; domains within each row share that scale. Values match the Average columns in `benchmark-data.js`.
+Hero bars show Base, R-Zero and R-Quest in that order. Gain labels compare R-Quest with R-Zero in percentage points. Each domain group uses a labeled, non-zero baseline to magnify differences; the scales are Qwen Math 44–54%, Code 56–64%, General 27–34%, and OctoThinker Math 22–32%, Code 11–20%, General 5–17%. Broken-axis marks on the bars and the caption disclose this zoom. Values match the Average columns in `benchmark-data.js`.

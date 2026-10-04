@@ -7,7 +7,6 @@ const barColumns = [...barPanel.querySelectorAll('.bar-column')];
 const reducedBarMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 let barTimers = [];
 let barsSeen = false;
-let barsVisible = false;
 
 function resetBars() {
   barTimers.forEach(clearTimeout);
@@ -34,11 +33,8 @@ function playBars() {
 if (!reducedBarMotion.matches) {
   const barObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
-      if (entry.isIntersecting && !barsVisible) {
-        barsVisible = true;
+      if (entry.isIntersecting && !barsSeen) {
         playBars();
-      } else if (!entry.isIntersecting) {
-        barsVisible = false;
       }
     });
   }, { threshold: 0 });

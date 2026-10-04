@@ -50,4 +50,6 @@
 @media(max-width:380px){.rejection-only{padding:14px}.rejection-only .curve-legend{font-size:14px;gap:10px}.rejection-readout output{font-size:21px}.rejection-readout span{font-size:12px}.rejection-readout-label{font-size:14px}}
 /* Keep the curve directly under its heading, where its reveal is visible. */
 .trajectory-card .live-trajectory{margin:0 0 16px}
-.trajectory-card figcaption{margin-top:auto;padding-top:20px}
+.trajectory-card{align-self:start}
+.trajectory-card figcaption{margin-top:24px;padding-top:0;text-align:center;line-height:1.35}
+.trajectory-card figcaption strong{display:block;font-size:clamp(22px,2.1vw,29px);font-weight:700;letter-spacing:-.5px}

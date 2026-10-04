@@ -7,11 +7,14 @@
   <meta name="theme-color" content="#f8faff">
   <title>R-Quest — Questioning the Questions</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=5">
-  <link rel="stylesheet" href="refresh.css?v=5">
-  <script src="benchmark-data.js?v=5" defer></script>
-  <script src="hero-bars.js?v=5" defer></script>
-  <script src="script.js?v=5" defer></script>
+  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="refresh.css?v=6">
+  <link rel="stylesheet" href="interaction.css?v=6">
+  <script src="benchmark-data.js?v=6" defer></script>
+  <script src="hero-bars.js?v=6" defer></script>
+  <script src="trajectory-data.js?v=6" defer></script>
+  <script src="interactive-charts.js?v=6" defer></script>
+  <script src="script.js?v=6" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -28,7 +31,7 @@
   <main id="main">
     <section class="hero section-shell" id="top">
       <div class="hero-copy">
-        <h1><span class="title-accent">Questioning the Questions:</span> Sustaining <span class="title-nobreak">Self-Evolution</span> in Reasoning Models</h1>
+        <h1><span class="title-accent">Questioning the Questions:</span><span class="title-remainder">Sustaining <span class="title-nobreak">Self-Evolution</span> in Reasoning Models</span></h1>
         <div class="authors" aria-label="Authors in paper order">
           <span><a href="https://sites.google.com/view/jinyuanli" target="_blank" rel="noopener noreferrer">Jinyuan Li</a><sup>1</sup>,</span>
           <span><a href="https://chengsong-huang.github.io/" target="_blank" rel="noopener noreferrer">Chengsong Huang</a><sup>1</sup>,</span>
@@ -54,10 +57,13 @@
           <div class="bar-legend" aria-label="Bar colors"><span><i class="legend-base"></i>Base model</span><span><i class="legend-zero"></i>R-Zero</span><span><i class="legend-quest"></i>R-Quest</span></div>
           <figcaption>Mathematics-focused self-evolution improves performance across all three domains. Scores are domain averages (%); bars use non-zero baselines.</figcaption>
         </figure>
-        <figure class="hero-chart-card trajectory-card">
-          <div class="chart-card-heading"><span>SUSTAINED SELF-EVOLUTION · TEN ROUNDS</span></div>
-          <div class="trajectory-plot"><button class="figure-button hero-plot" type="button" data-zoom="assets/teaser.webp" data-caption="Average performance on seven math benchmarks over ten rounds on Qwen3-4B-Base. R-Quest peaks at round ten, leading R-Zero by 17.32 points at the same round." aria-label="Enlarge the ten-round performance figure"><img src="assets/teaser.webp" width="1600" height="1528" alt="R-Quest improves to 51.92% in round ten, while R-Zero declines to 34.60%." fetchpriority="high"></button></div>
-          <figcaption><strong>Keep learning. Keep improving.</strong><br>Qwen3-4B-Base · Mathematical reasoning over ten rounds.</figcaption>
+        <figure class="hero-chart-card trajectory-card" id="hero-trajectory-card">
+          <div class="chart-card-heading"><span>SUSTAINED SELF-EVOLUTION · TEN ROUNDS</span><button type="button" id="replay-trajectory" aria-label="Replay the ten-round trajectory">↻ Replay</button></div>
+          <div class="live-trajectory"><svg id="trajectory-chart" viewBox="0 0 600 450" tabindex="0" role="img" aria-label="Ten-round mathematical performance of R-Quest and R-Zero"></svg></div>
+          <div class="trajectory-legend"><span><i class="quest-key"></i>R-Quest</span><span><i class="zero-key"></i>R-Zero</span></div>
+          <div class="trajectory-scrubber"><label for="trajectory-round" id="trajectory-round-value">Round 10</label><input id="trajectory-round" type="range" min="0" max="10" step="1" value="10" aria-label="Inspect a self-evolution round"></div>
+          <div class="trajectory-readout"><div><span>R-Quest</span><output id="trajectory-quest-value" class="quest-label">51.92%</output></div><div><span>R-Zero</span><output id="trajectory-zero-value" class="zero-label">34.60%</output></div><div><span>Difference</span><output id="trajectory-gap-value">+17.32 pts</output></div></div>
+          <figcaption><strong>Keep learning. Keep improving.</strong><br>Qwen3-4B-Base · Mathematical reasoning over ten rounds.<br><button class="source-figure-link" type="button" data-zoom="assets/teaser.webp" data-caption="Original ten-round figure. The interactive chart uses the plotted values recovered from the PDF’s vector paths and checked against the extended-run figure." aria-label="View the original ten-round paper figure"><img class="visually-hidden" src="assets/teaser.webp" alt="Original ten-round plot: R-Quest reaches 51.92%, while R-Zero ends at 34.60%.">View paper figure ↗</button></figcaption>
         </figure>
       </div>
     </section>
@@ -105,24 +111,35 @@
 
     <section class="method-band" id="method">
       <div class="section-shell content-section">
-        <div class="section-heading"><p class="eyebrow">02 / THE METHOD</p><h2>Better questions.<br>Sustained self-evolution.</h2><p>R-Quest introduces two forms of feedback: validity feedback from a solver initialized to recognize and reject invalid questions, and novelty feedback from the frozen base model.</p></div>
-        <figure class="overview-figure"><button class="figure-button" type="button" data-zoom="assets/overview.webp" data-caption="Two question-quality problems in self-evolution and how R-Quest addresses them: rejecting invalid questions and recognizing repeated mathematical tasks." aria-label="Enlarge the full R-Quest overview"><img src="assets/overview.webp" width="2800" height="989" alt="The paper’s illustrated overview compares R-Zero and R-Quest: R-Quest rejects invalid questions and recognizes repeated tasks." loading="lazy"></button><figcaption>Two question-quality problems in self-evolution and how R-Quest addresses them. Click the figure to enlarge.</figcaption></figure>
-        <div class="method-steps">
-          <article><span class="step-index blue">01</span><h3>Initialize for validity</h3><p>Train the base model with GRPO to return a mathematical answer for a valid question or <code>INVALID</code> for an invalid one.</p></article>
-          <article><span class="step-index violet">02</span><h3>Assess task novelty</h3><p>Use a frozen base model to compare sampled question pairs. A single same-type match is sufficient for rejection.</p></article>
-          <article><span class="step-index ink">03</span><h3>Co-evolve with feedback</h3><p>These signals guide questioner rewards during alternating questioner–solver updates. The solver trains on the filtered questions.</p></article>
+        <div class="section-heading"><p class="eyebrow">02 / THE METHOD</p><h2>Better questions.<br>Sustained self-evolution.</h2><p>R-Quest changes what counts as a useful training question. It equips the solver to reject invalid problems and assesses novelty through the underlying mathematical task, addressing the failure modes of answer-only training and lexical similarity.</p></div>
+        <div class="method-comparisons">
+          <article class="method-comparison validity-comparison">
+            <p class="eyebrow blue">01 / VALIDITY FEEDBACK</p><h3>From forced answers<br>to informed rejection.</h3>
+            <figure class="paper-figure"><button class="figure-button" type="button" data-zoom="assets/overview-validity.webp" data-caption="Validity-aware initialization enables the R-Quest solver to recognize and reject invalid questions." aria-label="Enlarge the validity comparison from the paper"><img src="assets/overview-validity.webp" width="1380" height="989" alt="R-Zero produces unstable answers to an invalid question and selects it for training. After validity initialization, R-Quest recognizes that no real solution exists, returns INVALID, and filters the question out." loading="lazy"></button></figure>
+            <div class="method-contrast"><div><span class="contrast-baseline">R-Zero</span><p>An answer-only solver produces inconsistent answers to a flawed question. High uncertainty can be mistaken for difficulty, allowing invalid questions to accumulate in training.</p></div><div><span class="contrast-ours">R-Quest</span><p>Validity-aware initialization teaches the solver to identify the flaw and return <code>INVALID</code>. Invalid questions are rejected instead of becoming training supervision.</p></div></div>
+          </article>
+          <article class="method-comparison novelty-comparison">
+            <p class="eyebrow violet">02 / NOVELTY FEEDBACK</p><h3>From different wording<br>to different tasks.</h3>
+            <figure class="paper-figure"><button class="figure-button" type="button" data-zoom="assets/overview-novelty.webp" data-caption="Semantic pairwise judgments identify repeated underlying tasks despite different wording or numerical values." aria-label="Enlarge the novelty comparison from the paper"><img src="assets/overview-novelty.webp" width="1410" height="989" alt="Two shortest-path problems have different presentation but the same underlying task. R-Zero's lexical similarity weakens the repetition penalty, while R-Quest's base-model judgment recognizes and filters the repeated task." loading="lazy"></button></figure>
+            <div class="method-contrast"><div><span class="contrast-baseline">R-Zero</span><p>BLEU separates reworded versions of the same mathematical task into different lexical clusters. Fragmented clusters weaken the repetition penalty on a frequently recurring exercise.</p></div><div><span class="contrast-ours">R-Quest</span><p>The frozen base model compares the mathematical setup and requested task. It recognizes equivalent exercises even when wording, notation, or numerical values change.</p></div></div>
+          </article>
         </div>
-        <div class="reward-strip" aria-label="Questioner rewards"><span class="reward invalid"><b>Invalid</b><span>Negative reward</span></span><span class="reward repeated"><b>Valid, repeated</b><span>Zero reward</span></span><span class="reward novel"><b>Valid, novel</b><span>Uncertainty reward</span></span></div>
+        <div class="method-steps">
+          <article><span class="step-index blue">01</span><h3>Validity-aware solver initialization</h3><p>With GRPO, we equip the solver to distinguish a flawed question from a difficult but valid one, producing an answer for the latter and <code>INVALID</code> for the former. A penalty on rejecting valid questions discourages excessive refusal.</p></article>
+          <article><span class="step-index violet">02</span><h3>Semantic novelty assessment</h3><p>A frozen base model compares each candidate with sampled references, identifying repetition from the mathematical setup and requested task. A single same-type match rejects the candidate, preventing changes in wording or values from masquerading as new tasks.</p></article>
+          <article><span class="step-index ink">03</span><h3>Feedback-driven co-evolution</h3><p>Validity and novelty feedback shape questioner rewards as the questioner and solver alternate GRPO updates. The solver learns from validity- and answer-consistency-filtered questions, with a small replay of initialization data to preserve its ability to reject invalid ones.</p></article>
+        </div>
         <div class="novelty-lab">
-          <div class="lab-copy"><p class="eyebrow">SAMPLED PAIRWISE JUDGMENTS</p><h3>Frequent task types<br>are less likely to pass.</h3><p>We uniformly sample <i>K</i> other questions per candidate and reject the candidate if any reference is judged to be of the same type. This reduces the comparison cost from O(<i>B</i><sup>2</sup>) to O(<i>BK</i>).</p><div class="formula">Pr(pass | <i>p</i>) ≈ (1 − <i>p</i>)<sup>K</sup></div><p class="small-note">Approximation when K is small relative to the batch size B.</p></div>
-          <div class="lab-controls">
-            <div class="control-heading"><label for="type-fraction">Same-type fraction <i>p</i></label><output id="fraction-value" for="type-fraction">20%</output></div>
-            <input type="range" id="type-fraction" min="0" max="100" step="1" value="20" aria-describedby="fraction-description">
-            <p id="fraction-description" class="small-note">Fraction of the remaining questions that share the same task type.</p>
+          <div class="lab-copy"><p class="eyebrow">SAMPLED PAIRWISE JUDGMENTS</p><h3>Frequent task types<br>are less likely to pass.</h3><p>For each candidate, the frozen base model compares <i>K</i> uniformly sampled reference questions. One same-type match is enough for rejection, reducing comparison cost from O(<i>B</i><sup>2</sup>) to O(<i>BK</i>).</p><div class="formula">Pr(pass | <i>p</i>) ≈ (1 − <i>p</i>)<sup id="formula-k">8</sup></div><p>With the default <i>K</i> = 8, a task type occupying 20% of the other candidates is rejected about 83% of the time. A larger comparison budget suppresses repetition more strongly.</p><p class="small-note">The large-batch approximation applies when K is small relative to B. Here p is a task type’s share of the other questions, not its absolute count.</p></div>
+          <div class="lab-controls curve-controls">
             <div class="control-heading"><label for="comparisons">Comparisons per question <i>K</i></label><select id="comparisons"><option value="2">2</option><option value="4">4</option><option value="8" selected>8 · paper default</option><option value="16">16</option></select></div>
-            <div class="pass-result"><span>Approximate pass probability</span><output id="pass-value" for="type-fraction comparisons" aria-live="polite">16.8%</output></div>
-            <div class="probability-track" aria-hidden="true"><span id="pass-bar" style="width:16.8%"></span></div>
-            <p class="lab-result-note" id="pass-description">At a 20% same-type fraction, about 17 in 100 candidates pass with K = 8.</p>
+            <div class="probability-metrics" role="group" aria-label="Probability shown on the curve"><button type="button" data-probability-metric="pass" aria-pressed="true">Pass probability</button><button type="button" data-probability-metric="reject" aria-pressed="false">Rejection probability</button></div>
+            <div class="curve-legend"><span><i class="curve-key selected-key"></i><span id="selected-k">K=8 · paper default</span></span><span><i class="curve-key reference-key"></i><span id="reference-k">K=16 · comparison</span></span></div>
+            <div class="probability-plot" id="probability-plot"><svg id="probability-chart" viewBox="0 0 600 395" tabindex="0" role="img" aria-label="Pass probability versus same-type share, with K=8 and K=16"></svg><div class="probability-tip" id="probability-tip" hidden></div></div>
+            <p class="chart-hint">Hover or tap the curve to inspect a task type’s share. Arrow keys work too.</p>
+            <div class="control-heading"><label for="type-fraction">Same-type share <i>p</i></label><output id="fraction-value" for="type-fraction">20%</output></div><input type="range" id="type-fraction" min="0" max="100" step="0.1" value="20" aria-describedby="fraction-description"><p id="fraction-description" class="visually-hidden">Fraction of other questions sharing the candidate's underlying mathematical task.</p>
+            <div class="probability-readout"><div><span>Pass</span><output id="pass-value" for="type-fraction comparisons">16.8%</output></div><div><span>Reject</span><output id="reject-value" for="type-fraction comparisons">83.2%</output></div></div>
+            <div class="share-examples"><span>Inspect</span><button type="button" data-share="5" aria-pressed="false">5% share</button><button type="button" data-share="20" aria-pressed="true">20% share</button></div><p class="lab-result-note" id="pass-description">With K=8, a 20% same-type share means about 83 in 100 candidates of that type are rejected.</p>
           </div>
         </div>
       </div>

@@ -35,15 +35,19 @@ The website separates the five-round benchmark tables from the ten-round extende
 ## Interactions
 
 - Light/dark theme, saved locally.
-- A centered title and linked authors, followed by six animated domain-average bar groups and the paper's ten-round trajectory.
+- A centered, explicitly two-line title and linked authors, followed by six animated domain-average bar groups and an inspectable ten-round trajectory.
 - Bar growth on entry and a Replay button; reduced-motion preferences show the completed chart immediately.
 - Invalid-question trend and controlled-repair figures (Fig. 3a and the full Fig. 3b), followed by the task-repetition analysis.
-- An approximate novelty pass-probability calculator using `(1-p)^K`, labeled as an approximation.
+- A round-by-round trajectory animation, Replay, hover inspection and a keyboard-accessible round slider.
+- Separate validity and novelty comparisons, using the corresponding halves of the original overview figure.
+- Interactive novelty probability curves using the paper's large-batch approximation `(1-p)^K`, with K selection, pass/rejection toggles, pointer tooltips and keyboard navigation.
 - Backbone and domain selection with named, per-benchmark results across all twelve benchmarks.
 - Four analysis figure tabs.
 - Figure enlargement with a keyboard-accessible dialog.
 - Copyable BibTeX citation.
 
 The site uses no analytics, accounts, model APIs or external JavaScript dependencies.
+
+The trajectory values in `trajectory-data.js` and `assets/trajectory-data.csv` were recovered from the vector paths in `assets/evolution.pdf`, then independently cross-checked against `assets/teaser.pdf`. They reproduce the plotted scores to two decimal places; they are not raw, unrounded experiment logs. Round zero is the base model. The robot illustrations are embedded images extracted from the original teaser PDF. The overview halves are mechanical crops of the original overview, without altering its contents.
 
 Hero bars show Base, R-Zero and R-Quest in that order. Scores match the Average columns in `benchmark-data.js`. A blue training label and arrow connect math-focused self-evolution to purple code/general transfer labels. Each group uses a non-zero baseline to magnify differences; broken-axis marks and the caption disclose this zoom. The underlying scales are Qwen Math 44–54%, Code 56–64%, General 27–34%, and OctoThinker Math 22–32%, Code 11–20%, General 5–17%. Exact ranges remain in the charts’ accessible descriptions. Gain badges and visible axis-range labels are omitted.

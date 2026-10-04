@@ -24,20 +24,6 @@ function keyboardTabs(buttons, select) {
   }));
 }
 
-const fraction = document.getElementById('type-fraction');
-const comparisons = document.getElementById('comparisons');
-function updateProbability() {
-  const p = Number(fraction.value), k = Number(comparisons.value);
-  const percent = Math.pow(1 - p / 100, k) * 100;
-  document.getElementById('fraction-value').textContent = p + '%';
-  document.getElementById('pass-value').textContent = percent.toFixed(1) + '%';
-  document.getElementById('pass-bar').style.width = percent + '%';
-  document.getElementById('pass-description').textContent = `At a ${p}% same-type fraction, about ${Math.round(percent)} in 100 candidates pass with K = ${k}.`;
-}
-fraction.addEventListener('input', updateProbability);
-comparisons.addEventListener('change', updateProbability);
-updateProbability();
-
 let benchmarkBackbone = 'qwen';
 let benchmarkDomain = 'math';
 const domainLabels = { math:'Mathematical reasoning', code:'Code generation', general:'General-domain reasoning' };

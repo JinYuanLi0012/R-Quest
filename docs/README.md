@@ -38,9 +38,9 @@ The website separates the five-round benchmark tables from the ten-round extende
 - A centered, explicitly two-line title and linked authors, followed by six animated domain-average bar groups and an inspectable ten-round trajectory.
 - Bar growth on entry and a Replay button; reduced-motion preferences show the completed chart immediately.
 - Invalid-question trend and controlled-repair figures (Fig. 3a and the full Fig. 3b), followed by the task-repetition analysis.
-- A round-by-round trajectory animation, Replay, hover inspection and a keyboard-accessible round slider.
+- A round-by-round trajectory animation that starts on page load and replays automatically on its first entry into view, plus Replay, hover inspection and a keyboard-accessible round slider.
 - Separate validity and novelty comparisons, using the corresponding halves of the original overview figure.
-- Interactive novelty probability curves using the paper's large-batch approximation `(1-p)^K`, with K selection, pass/rejection toggles, pointer tooltips and keyboard navigation.
+- Compact rejection-probability curves using the paper's large-batch approximation `1-(1-p)^K`, simultaneously showing K=4, 8 and 16. K=8 is emphasized as the default; pointer tooltips and keyboard navigation compare all three budgets at the same task share.
 - Backbone and domain selection with named, per-benchmark results across all twelve benchmarks.
 - Four analysis figure tabs.
 - Figure enlargement with a keyboard-accessible dialog.

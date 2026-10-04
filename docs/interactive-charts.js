@@ -41,7 +41,7 @@
   const robotZ = make('image', { href: 'assets/trajectory-zero.png', x: 427, y: ty(34.60) - 13, width: 49, height: 49, class: 'trajectory-robot' }, chart);
   const roundInput = document.getElementById('trajectory-round');
   const roundOutput = document.getElementById('trajectory-round-value');
-  let revealed = 10, selectedRound = 10, animationFrame = 0, animationStarted = false;
+  let revealed = 10, selectedRound = 10, animationFrame = 0, firstViewPlayed = false;
 
   function selectRound(round) {
     selectedRound = Math.min(Math.floor(revealed), Math.max(0, Math.round(round)));
@@ -79,21 +79,23 @@
     drawTrajectory(0);
     const start = performance.now();
     function frame(now) {
-      const progress = Math.min(10, (now - start) / 480);
+      const progress = Math.min(10, (now - start) / 600);
       drawTrajectory(progress);
       if (progress < 10) animationFrame = requestAnimationFrame(frame);
     }
     animationFrame = requestAnimationFrame(frame);
   }
-  drawTrajectory(10);
+  // Start on page load; also replay automatically when an initially off-screen
+  // chart first comes into view, so readers never need to press a control.
+  playTrajectory();
   const trajectoryObserver = new IntersectionObserver(entries => {
-    if (!animationStarted && entries.some(entry => entry.isIntersecting)) {
-      animationStarted = true; playTrajectory();
+    if (!firstViewPlayed && entries.some(entry => entry.isIntersecting)) {
+      firstViewPlayed = true; playTrajectory();
     }
   }, { threshold: 0.1 });
   trajectoryObserver.observe(chart);
-  document.getElementById('replay-trajectory').addEventListener('click', () => { animationStarted = true; playTrajectory(); });
-  function inspectRound(round) { animationStarted = true; cancelAnimationFrame(animationFrame); drawTrajectory(10); selectRound(round); }
+  document.getElementById('replay-trajectory').addEventListener('click', () => { firstViewPlayed = true; playTrajectory(); });
+  function inspectRound(round) { firstViewPlayed = true; cancelAnimationFrame(animationFrame); drawTrajectory(10); selectRound(round); }
   roundInput.addEventListener('input', () => inspectRound(Number(roundInput.value)));
   chart.addEventListener('pointermove', event => {
     const box = chart.getBoundingClientRect();
@@ -112,76 +114,56 @@
     if (next !== undefined) { event.preventDefault(); inspectRound(next); }
   });
 
-  // The paper's large-batch approximation; rejection = 1 - pass.
+  // The paper's large-batch approximation, shown only as rejection curves.
   const probabilityChart = document.getElementById('probability-chart');
   const px = p => 65 + p / 100 * 485;
-  const py = probability => 308 - probability / 100 * 264;
+  const py = probability => 248 - probability / 100 * 216;
   [0, 25, 50, 75, 100].forEach(value => {
     make('line', { x1: 65, x2: 550, y1: py(value), y2: py(value), class: 'chart-grid' }, probabilityChart);
     make('text', { x: 51, y: py(value) + 6, 'text-anchor': 'end', class: 'chart-tick' }, probabilityChart, value);
-    make('text', { x: px(value), y: 336, 'text-anchor': 'middle', class: 'chart-tick' }, probabilityChart, value);
+    make('text', { x: px(value), y: 277, 'text-anchor': 'middle', class: 'chart-tick' }, probabilityChart, value);
   });
-  make('text', { x: 307, y: 373, 'text-anchor': 'middle', class: 'chart-axis-title' }, probabilityChart, 'Same-type share p (%)');
-  const probabilityAxis = make('text', { transform: 'translate(19 179) rotate(-90)', 'text-anchor': 'middle', class: 'chart-axis-title' }, probabilityChart, 'Pass probability (%)');
-  const probabilityArea = make('path', { class: 'probability-area' }, probabilityChart);
-  const referenceCurve = make('path', { class: 'probability-reference' }, probabilityChart);
-  const selectedCurve = make('path', { class: 'probability-selected' }, probabilityChart);
-  const probabilityGuide = make('line', { y1: 44, y2: 308, class: 'chart-guide' }, probabilityChart);
-  const referenceDot = make('circle', { r: 5, class: 'probability-reference-dot' }, probabilityChart);
-  const selectedDot = make('circle', { r: 6.5, class: 'quest-dot chart-head' }, probabilityChart);
-  const share = document.getElementById('type-fraction');
-  const budget = document.getElementById('comparisons');
+  make('text', { x: 307, y: 318, 'text-anchor': 'middle', class: 'chart-axis-title' }, probabilityChart, 'Questions sharing the same task (%)');
+  make('text', { transform: 'translate(19 140) rotate(-90)', 'text-anchor': 'middle', class: 'chart-axis-title' }, probabilityChart, 'Rejection probability (%)');
+  const rejection = (p, k) => (1 - Math.pow(1 - p / 100, k)) * 100;
+  const samples = Array.from({ length: 201 }, (_, i) => i / 2);
+  const area = make('path', { class: 'probability-area' }, probabilityChart);
+  area.setAttribute('d', path([[65, 248], ...samples.map(p => [px(p), py(rejection(p, 8))]), [550, 248]]) + ' Z');
+  const curves = [4, 16, 8].map(k => {
+    const line = make('path', { class: `rejection-curve budget-${k}`, 'data-k': k }, probabilityChart);
+    line.setAttribute('d', path(samples.map(p => [px(p), py(rejection(p, k))])));
+    return { k, line };
+  });
+  const probabilityGuide = make('line', { y1: 32, y2: 248, class: 'chart-guide' }, probabilityChart);
+  curves.forEach(curve => { curve.dot = make('circle', { r: curve.k === 8 ? 6 : 4.5, class: `rejection-dot budget-${curve.k}` }, probabilityChart); });
   const tip = document.getElementById('probability-tip');
-  let metric = 'pass';
-  const pass = (p, k) => Math.pow(1 - p / 100, k) * 100;
-  const valueFor = (p, k) => metric === 'pass' ? pass(p, k) : 100 - pass(p, k);
-  const referenceK = () => Number(budget.value) === 16 ? 8 : 16;
-
+  let selectedShare = 20;
   function selectShare(p) {
-    p = Math.round(Math.min(100, Math.max(0, p)) * 10) / 10;
-    const k = Number(budget.value), passing = pass(p, k), rejection = 100 - passing;
-    share.value = p;
-    document.getElementById('fraction-value').textContent = p.toFixed(p % 1 ? 1 : 0) + '%';
-    document.getElementById('pass-value').textContent = passing.toFixed(1) + '%';
-    document.getElementById('reject-value').textContent = rejection.toFixed(1) + '%';
-    probabilityGuide.setAttribute('x1', px(p)); probabilityGuide.setAttribute('x2', px(p));
-    [[selectedDot, k], [referenceDot, referenceK()]].forEach(([dot, comparisons]) => {
-      dot.setAttribute('cx', px(p)); dot.setAttribute('cy', py(valueFor(p, comparisons)));
+    selectedShare = Math.round(Math.min(100, Math.max(0, p)) * 10) / 10;
+    const label = selectedShare.toFixed(selectedShare % 1 ? 1 : 0) + '%';
+    document.getElementById('fraction-value').textContent = label;
+    probabilityGuide.setAttribute('x1', px(selectedShare)); probabilityGuide.setAttribute('x2', px(selectedShare));
+    curves.forEach(({ k, dot }) => {
+      const value = rejection(selectedShare, k);
+      dot.setAttribute('cx', px(selectedShare)); dot.setAttribute('cy', py(value));
+      document.getElementById(`rejection-k${k}`).textContent = value.toFixed(1) + '%';
     });
-    tip.innerHTML = `<strong>${p.toFixed(p % 1 ? 1 : 0)}% same-type share · K=${k}</strong><span>Pass ${passing.toFixed(1)}% · Reject ${rejection.toFixed(1)}%</span>`;
-    document.getElementById('pass-description').textContent = `With K=${k}, a ${p}% same-type share means about ${Math.round(rejection)} in 100 candidates of that type are rejected.`;
-    probabilityChart.setAttribute('aria-label', `K=${k}, same-type share ${p}%, pass ${passing.toFixed(1)}%, rejection ${rejection.toFixed(1)}%. Use left and right arrow keys to explore.`);
-    document.querySelectorAll('[data-share]').forEach(button => button.setAttribute('aria-pressed', String(Number(button.dataset.share) === p)));
-  }
-  function drawProbability() {
-    const k = Number(budget.value), reference = referenceK();
-    const samples = Array.from({ length: 201 }, (_, i) => i / 2);
-    const selected = samples.map(p => [px(p), py(valueFor(p, k))]);
-    selectedCurve.setAttribute('d', path(selected));
-    referenceCurve.setAttribute('d', path(samples.map(p => [px(p), py(valueFor(p, reference))])));
-    probabilityArea.setAttribute('d', path([[65, 308], ...selected, [550, 308]]) + ' Z');
-    probabilityAxis.textContent = metric === 'pass' ? 'Pass probability (%)' : 'Rejection probability (%)';
-    document.getElementById('selected-k').textContent = `K=${k}${k === 8 ? ' · paper default' : ''}`;
-    document.getElementById('reference-k').textContent = `K=${reference} · comparison`;
-    document.getElementById('formula-k').textContent = k;
-    document.querySelectorAll('[data-probability-metric]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.probabilityMetric === metric)));
-    selectShare(Number(share.value));
-    if (!motion.matches && selectedCurve.animate) selectedCurve.animate([{ opacity: 0.25 }, { opacity: 1 }], { duration: 450 });
+    tip.innerHTML = `<strong>${label} share the same task</strong>` + [4, 8, 16].map(k => `<span class="tip-budget budget-${k}"><span>K=${k}${k === 8 ? ' · default' : ''}</span><b>${rejection(selectedShare, k).toFixed(1)}%</b></span>`).join('');
+    probabilityChart.setAttribute('aria-label', `${label} of questions share the same task. Rejection probabilities: K=4 ${rejection(selectedShare, 4).toFixed(1)}%, K=8 ${rejection(selectedShare, 8).toFixed(1)}%, K=16 ${rejection(selectedShare, 16).toFixed(1)}%. Use arrow keys to explore.`);
   }
   function moveShare(event) {
     const box = probabilityChart.getBoundingClientRect();
     selectShare(((event.clientX - box.left) / box.width * 600 - 65) / 485 * 100);
     tip.hidden = false;
     const outer = document.getElementById('probability-plot').getBoundingClientRect();
-    const left = Math.min(Math.max(8, event.clientX - outer.left - 110), Math.max(8, outer.width - 232));
-    const top = Math.max(6, (py(valueFor(Number(share.value), Number(budget.value))) / 395 * box.height) - 76);
-    tip.style.left = left + 'px'; tip.style.top = top + 'px';
+    tip.style.left = Math.min(Math.max(8, event.clientX - outer.left - 95), Math.max(8, outer.width - 212)) + 'px';
+    tip.style.top = Math.max(6, py(rejection(selectedShare, 8)) / 340 * box.height - 120) + 'px';
   }
   probabilityChart.addEventListener('pointermove', moveShare);
   probabilityChart.addEventListener('pointerdown', moveShare);
   probabilityChart.addEventListener('pointerleave', () => { tip.hidden = true; });
   probabilityChart.addEventListener('keydown', event => {
-    let p = Number(share.value);
+    let p = selectedShare;
     if (event.key === 'ArrowLeft') p -= 1;
     else if (event.key === 'ArrowRight') p += 1;
     else if (event.key === 'Home') p = 0;
@@ -189,10 +171,7 @@
     else return;
     event.preventDefault(); selectShare(p);
   });
-  share.addEventListener('input', () => selectShare(Number(share.value)));
-  budget.addEventListener('change', drawProbability);
-  document.querySelectorAll('[data-probability-metric]').forEach(button => button.addEventListener('click', () => { metric = button.dataset.probabilityMetric; tip.hidden = true; drawProbability(); }));
-  document.querySelectorAll('[data-share]').forEach(button => button.addEventListener('click', () => { tip.hidden = true; selectShare(Number(button.dataset.share)); }));
   motion.addEventListener('change', () => { if (motion.matches) { cancelAnimationFrame(animationFrame); drawTrajectory(10); } });
-  drawProbability();
+  selectShare(20);
+
 })();

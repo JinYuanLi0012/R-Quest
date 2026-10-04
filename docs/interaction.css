@@ -30,3 +30,21 @@
 @media(max-width:380px){.title-nobreak{white-space:normal}.hero h1{font-size:28px}.trajectory-readout output{font-size:14px}.trajectory-readout span{font-size:12px}.trajectory-legend{font-size:14px}.curve-controls{padding:14px}}
 @media(prefers-reduced-motion:reduce){#replay-trajectory{display:none}}
 .probability-tip{max-width:min(232px,calc(100% - 16px))}
+/* Compact, simultaneous rejection curves. K=8 is the visual anchor. */
+.novelty-lab{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:36px;align-items:center}
+.rejection-only{padding:22px}.rejection-heading{font-size:21px;font-weight:600;margin:0;text-align:center}
+.rejection-only .curve-legend{margin-top:14px;gap:12px 23px;font-size:16px}.default-budget{font-weight:650;color:var(--violet)}
+.curve-key.budget-4{border-color:#648cb0;border-top-style:dashed}.curve-key.budget-8{border-color:var(--violet);border-top-width:4px}.curve-key.budget-16{border-color:#479d8a;border-top-style:dashed}
+.rejection-curve{fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:6 4}.rejection-curve.budget-4{stroke:#648cb0}.rejection-curve.budget-8{stroke:var(--violet);stroke-width:4.4;stroke-dasharray:none}.rejection-curve.budget-16{stroke:#479d8a}
+.rejection-dot{stroke:var(--paper);stroke-width:2}.rejection-dot.budget-4{fill:#648cb0}.rejection-dot.budget-8{fill:var(--violet)}.rejection-dot.budget-16{fill:#479d8a}
+.rejection-only .probability-plot{max-width:540px;margin:13px auto 0}.rejection-only .chart-hint{font-size:14px;text-align:center;margin:3px 0 16px}
+.rejection-readout-label{display:flex;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding-top:14px;font-size:15px;color:var(--muted)}.rejection-readout-label output{color:var(--violet);font-weight:650;white-space:nowrap}
+.rejection-readout{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:12px;text-align:center}.rejection-readout>div{display:flex;flex-direction:column;gap:5px;padding:8px 3px;border-radius:6px}.rejection-readout .default-budget{background:var(--soft-violet)}.rejection-readout span{font-size:15px;color:var(--muted)}.rejection-readout output{font-size:25px;font-weight:600;letter-spacing:-.6px}.rejection-readout .budget-4 output{color:#648cb0}.rejection-readout .budget-8 output{color:var(--violet)}.rejection-readout .budget-16 output{color:#479d8a}
+.probability-tip .tip-budget{display:flex;align-items:center;justify-content:space-between;gap:18px}.tip-budget.budget-4{color:#648cb0}.tip-budget.budget-8{color:var(--violet);font-weight:650}.tip-budget.budget-16{color:#479d8a}
+/* Results now use the same reading scale as the method and problem sections. */
+.result-story p,.evidence-copy p{font-size:20px;line-height:1.7}.subsection-heading h3{font-size:30px}.subsection-heading p{font-size:19px}.benchmark-block .segmented button,.evidence-tabs .tab{font-size:18px;padding:11px 17px}.benchmark-domains{margin-bottom:22px}
+#benchmark-table{font-size:18px}#benchmark-table thead th{font-size:16px}#benchmark-table th,#benchmark-table td{padding:17px 15px}#benchmark-table[data-domain=math]{min-width:1170px}#benchmark-table[data-domain=general]{min-width:780px}.benchmark-scroll-hint{font-size:16px!important}
+.evidence-block{margin-top:58px}.evidence-copy h3{font-size:34px}.evidence-panel .paper-figure figcaption{font-size:16px;line-height:1.6}
+@media(max-width:1050px){.novelty-lab{grid-template-columns:1fr;gap:25px}.rejection-only{max-width:650px;width:100%;margin-inline:auto}.evidence-copy h3{font-size:30px}}
+@media(max-width:760px){.rejection-only{padding:18px}.rejection-heading{font-size:20px}.result-story p,.evidence-copy p{font-size:18px}.subsection-heading h3{font-size:26px}.subsection-heading p{font-size:18px}.benchmark-block .segmented button,.evidence-tabs .tab{font-size:16px;padding:10px 13px}#benchmark-table{font-size:17px}#benchmark-table thead th{font-size:15px}.evidence-panel .paper-figure figcaption{font-size:15px}}
+@media(max-width:380px){.rejection-only{padding:14px}.rejection-only .curve-legend{font-size:14px;gap:10px}.rejection-readout output{font-size:21px}.rejection-readout span{font-size:12px}.rejection-readout-label{font-size:14px}}

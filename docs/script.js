@@ -38,7 +38,6 @@ function renderBenchmarks() {
   table.querySelector('tbody').innerHTML = data.rows.map(row => '<tr' + (row[0]==='R-Quest'?' class="ours"':'') + '><th scope="row">' + row[0] + (row[0]==='R-Quest'?' <span>Ours</span>':'') + '</th>' + row.slice(1).map((score,index) => '<td class="' + (index===0?'average-column ':'') + (score===best[index]?'best':'') + '">' + score.toFixed(2) + '</td>').join('') + '</tr>').join('');
   document.querySelectorAll('[data-backbone]').forEach(button => { const active=button.dataset.backbone===benchmarkBackbone;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active)); });
   document.querySelectorAll('[data-benchmark-domain]').forEach(button => { const active=button.dataset.benchmarkDomain===benchmarkDomain;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active)); });
-  document.getElementById('benchmark-metric').textContent = benchmarkDomain==='math' ? 'AMC and AIME: mean@32. Other math benchmarks: greedy-decoding accuracy.' : benchmarkDomain==='code' ? 'HumanEval+ and MBPP+: pass@1 on the full EvalPlus test suites.' : 'SuperGPQA, MMLU-Pro and BBEH: exact-match accuracy under greedy decoding.';
 }
 document.querySelectorAll('[data-backbone]').forEach(button => button.addEventListener('click', () => {benchmarkBackbone=button.dataset.backbone;renderBenchmarks();}));
 document.querySelectorAll('[data-benchmark-domain]').forEach(button => button.addEventListener('click', () => {benchmarkDomain=button.dataset.benchmarkDomain;renderBenchmarks();}));
@@ -60,7 +59,6 @@ function chooseEvidence(button) {
   document.getElementById('evidence-title').innerHTML=d.title;
   document.getElementById('evidence-body').textContent=d.body;
   document.getElementById('evidence-caption').textContent=d.caption;
-  document.getElementById('evidence-pdf').href=`assets/${d.asset}.pdf`;
   const zoom=document.getElementById('evidence-zoom');zoom.dataset.zoom=img.src;zoom.dataset.caption=d.caption;
 }
 evidenceTabs.forEach(b=>b.addEventListener('click',()=>chooseEvidence(b)));

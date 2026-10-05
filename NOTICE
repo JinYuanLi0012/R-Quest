@@ -1,0 +1,10 @@
+R-Quest
+
+This code builds on the following projects:
+R-Zero: https://github.com/Chengsong-Huang/R-Zero
+EasyR1: https://github.com/hiyouga/EasyR1
+VERL: https://github.com/volcengine/verl
+
+Original source copyright notices are retained, including
+Copyright 2024 Bytedance Ltd. and/or its affiliates.
+See LICENSE for Apache License 2.0. Model and dataset terms are separate.

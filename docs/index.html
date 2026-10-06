@@ -7,9 +7,9 @@
   <meta name="theme-color" content="#f8faff">
   <title>R-Quest — Questioning the Questions</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=9">
+  <link rel="stylesheet" href="style.css?v=10">
   <link rel="stylesheet" href="refresh.css?v=9">
-  <link rel="stylesheet" href="interaction.css?v=15">
+  <link rel="stylesheet" href="interaction.css?v=16">
   <script src="benchmark-data.js?v=9" defer></script>
   <script src="hero-bars.js?v=9" defer></script>
   <script src="trajectory-data.js?v=9" defer></script>
@@ -44,7 +44,7 @@
         <div class="affiliations"><span><sup>1</sup> Washington University in St. Louis</span><span><sup>2</sup> University of Michigan, Ann Arbor</span><span class="corresponding"><sup>*</sup> Corresponding author</span></div>
         <p class="hero-summary">Self-evolving reasoning models learn from their own generated questions, yet repeated self-training can lead to performance collapse. <strong>R-Quest uses question validity and novelty feedback to sustain self-evolution.</strong></p>
         <div class="hero-actions">
-          <button class="button paper-pending" type="button" disabled title="The arXiv paper has not been published yet"><svg class="resource-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg><span class="resource-label">Paper</span><span class="resource-status">Coming soon</span></button>
+          <a class="button paper-button" href="https://arxiv.org/abs/2610.04299" target="_blank" rel="noopener noreferrer"><svg class="resource-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg><span class="resource-label">Paper</span><span class="resource-status">arXiv</span></a>
           <a class="button code-button" href="https://github.com/JinYuanLi0012/R-Quest" target="_blank" rel="noopener noreferrer"><svg class="resource-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.68-.22.68-.48v-1.86c-2.78.6-3.37-1.18-3.37-1.18-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.64.35-1.08.63-1.33-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.99 1.03-2.69-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.03a9.58 9.58 0 0 1 5 0c1.91-1.3 2.75-1.03 2.75-1.03.55 1.38.2 2.4.1 2.65.64.7 1.03 1.6 1.03 2.69 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 22 12c0-5.52-4.48-10-10-10Z"/></svg><span class="resource-label">Code</span><svg class="resource-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
         </div>
       </div>
@@ -163,7 +163,7 @@
       </div>
     </section>
 
-    <section class="cite-band" id="cite"><div class="section-shell content-section cite-layout"><div><p class="eyebrow">04 / CITE THIS WORK</p><h2>R-Quest</h2><p>Questioning the Questions: Sustaining Self-Evolution in Reasoning Models</p><p class="small-note">Preprint · 2026<br>arXiv link coming soon.</p><a class="button primary" href="https://github.com/JinYuanLi0012/R-Quest" target="_blank" rel="noopener noreferrer">View code on GitHub</a></div><div class="citation-box"><div class="citation-heading"><span>BibTeX</span><button type="button" id="copy-citation">Copy citation</button></div><pre id="bibtex">@misc{li2026rquest,
+    <section class="cite-band" id="cite"><div class="section-shell content-section cite-layout"><div><p class="eyebrow">04 / CITE THIS WORK</p><h2>R-Quest</h2><p>Questioning the Questions: Sustaining Self-Evolution in Reasoning Models</p><p class="small-note">Preprint · 2026<br><a href="https://arxiv.org/abs/2610.04299" target="_blank" rel="noopener noreferrer">arXiv:2610.04299</a></p><a class="button primary" href="https://github.com/JinYuanLi0012/R-Quest" target="_blank" rel="noopener noreferrer">View code on GitHub</a></div><div class="citation-box"><div class="citation-heading"><span>BibTeX</span><button type="button" id="copy-citation">Copy citation</button></div><pre id="bibtex">@misc{li2026rquest,
   title={Questioning the Questions: Sustaining
          Self-Evolution in Reasoning Models},
   author={Jinyuan Li and Chengsong Huang and
@@ -171,7 +171,10 @@
           Shiping Gao and Yuyi Yang and
           Jiaxin Huang},
   year={2026},
-  url={https://github.com/JinYuanLi0012/R-Quest}
+  eprint={2610.04299},
+  archivePrefix={arXiv},
+  primaryClass={cs.LG},
+  url={https://arxiv.org/abs/2610.04299}
 }</pre><p class="copy-status" id="copy-status" role="status" aria-live="polite"></p></div></div></section>
   </main>
   <footer class="footer section-shell"><a class="brand" href="#top"><span class="brand-icon">Q</span>R-Quest</a><p>Question validity. Task novelty. Sustained self-evolution.</p><span>© 2026 R-Quest authors</span></footer>

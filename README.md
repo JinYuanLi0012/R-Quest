@@ -2,7 +2,7 @@
 
 > **R-Quest** sustains reasoning-model self-evolution by improving the questions used for training through validity and task-novelty feedback.
 
-[Project Page](https://jinyuanli0012.github.io/R-Quest/) · [Validity-RL Data](https://huggingface.co/datasets/jinyuan222/rzero-validity-rl-terra-v1-clean-v1) · Paper: Coming soon
+[Project Page](https://jinyuanli0012.github.io/R-Quest/) · [Validity-RL Data](https://huggingface.co/datasets/jinyuan222/rzero-validity-rl-terra-v1-clean-v1) · [Paper](https://arxiv.org/abs/2610.04299)
 
 [Jinyuan Li](https://sites.google.com/view/jinyuanli)<sup>1</sup>, [Chengsong Huang](https://chengsong-huang.github.io/)<sup>1</sup>, [Langlin Huang](https://shrango.github.io/)<sup>1</sup>, [Donghong Cai](https://ilikevegetable.github.io/)<sup>1</sup>, [Shiping Gao](https://gaoshiping.github.io/)<sup>2</sup>, [Yuyi Yang](https://yyuyi.github.io/)<sup>1</sup>, [Jiaxin Huang](https://teapot123.github.io/)<sup>1,*</sup>
 
@@ -10,6 +10,7 @@
 
 ## 🔥 Updates
 
+- Our [paper](https://arxiv.org/abs/2610.04299) is now available on arXiv.
 - The [project page](https://jinyuanli0012.github.io/R-Quest/) presents our method, benchmark results, and ten-round self-evolution analysis.
 
 ## 🧩 Overview
@@ -124,6 +125,9 @@ If our work is useful for you, please consider citing our paper:
   title={Questioning the Questions: Sustaining Self-Evolution in Reasoning Models},
   author={Jinyuan Li and Chengsong Huang and Langlin Huang and Donghong Cai and Shiping Gao and Yuyi Yang and Jiaxin Huang},
   year={2026},
-  url={https://github.com/JinYuanLi0012/R-Quest}
+  eprint={2610.04299},
+  archivePrefix={arXiv},
+  primaryClass={cs.LG},
+  url={https://arxiv.org/abs/2610.04299}
 }
 ```
